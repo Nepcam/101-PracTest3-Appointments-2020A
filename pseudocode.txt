@@ -2,12 +2,23 @@ Declare variables
 Set the filter for the open file dialog control
 IF user selects a file THEN
    Draw empty calendar (by calling the supplied method)
-   
-
-
-
-
-
-   ENDWHILE
+   Open the selected file
+      WHILE not end of file
+         TRY
+            READ a csv line from the file
+            SPLIT the values and store into the array
+            IF the array has the correct number of elements THEN
+               Extract values from the array and place into separate variables   
+               Display the values into a listbox neatly padded out  
+               Count number of appointments
+               Display the total of appointments  
+               Calculate X and Y position of appointments 
+               Draw appointments into the calendar
+            ELSE
+               Display error message to the console window
+            ENDIF
+         CATCH
+            Display error message to the console window   
+      ENDWHILE
    Close the input file
 ENDIF
