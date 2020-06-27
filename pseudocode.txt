@@ -1,0 +1,13 @@
+Declare variables
+Set the filter for the open file dialog control
+IF user selects a file THEN
+   Draw empty calendar (by calling the supplied method)
+   
+
+
+
+
+
+   ENDWHILE
+   Close the input file
+ENDIF
