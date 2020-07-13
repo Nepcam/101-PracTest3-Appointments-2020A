@@ -32,6 +32,16 @@ namespace PracTest3
         Color WORK_COLOUR = Color.Gold;
         Color PERSONAL_COLOUR = Color.LightBlue;
 
+        //Filter for CSV files
+        const string FILTER = "CSV Files|*.csv|ALL Files|'.'";
+
+        //Create lists to store the data
+        List<string> dayList = new List<string>();
+        List<int> hourList = new List<int>();
+        List<string> workAppList = new List<string>();
+        List<string> personalAppList = new List<string>();
+        List<string> textList = new List<string>();
+
         public Form1()
         {
             InitializeComponent();
@@ -138,6 +148,78 @@ namespace PracTest3
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Opens CSV File of appointment information and displays information in the listbox and draws appointments into the calendar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Declare variables
+            Graphics paper = pictureBoxCalendar.CreateGraphics();
+            StreamReader reader;
+            string line = "";
+            string[] csvArray;
+            string day = "";
+            int hour = 0;
+            string workApp = "";
+            string personalApp = "";
+            string text = "";
+
+            //Set the filter for the open file dialog control
+            openFileDialog1.Filter = FILTER;
+            //IF user selects a file THEN
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Draw empty calendar
+                DrawCalendar(paper);
+                //Open the selected file
+                reader = File.OpenText(openFileDialog1.FileName);
+                //WHILE not end of file
+                while(!reader.EndOfStream)
+                {
+                    try
+                    {
+                        //READ a csv line from the file
+                        line = reader.ReadLine();
+                        //SPLIT the values and store into the array
+                        csvArray = line.Split(',');
+                        //IF the array has the correct number of elements THEN
+                        if (csvArray.Length == 4)
+                        {
+                            //Extract values from the array and place into separate variables
+                            day = csvArray[0];
+                            hour = int.Parse(csvArray[1]);
+                            workApp = csvArray[2];
+                            //personalApp = csvArray[3];
+                            text = csvArray[3];
+
+                            //Add data to the lists
+                            dayList.Add(day);
+                            hourList.Add(hour);
+                            workAppList.Add(workApp);
+                            personalAppList.Add(personalApp);
+                            textList.Add(text);
+
+                            //Display the values into a listbox neatly padded out
+                            listBoxCalendar.Items.Add(day.PadRight(10) + hour.ToString().PadRight(5) + workApp.PadRight(5) + text.PadRight(5));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: " + line);
+
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Error: " + line);
+                    }
+                }
+                //Close the file
+                reader.Close();
+            }
         }
     }
 }
